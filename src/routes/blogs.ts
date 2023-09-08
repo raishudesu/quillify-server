@@ -8,23 +8,23 @@ import {
 } from "../controllers/blogController";
 import auth from "../middleware/auth";
 import validateBlog from "../middleware/validateBlog";
-import { blogSchema } from "../lib/zodSchemas";
+import { createBlogSchema, updateBlogSchema } from "../lib/zodSchemas";
 
 const router = Router();
 
-// get all workouts
+// get all blogs
 router.get("/", [auth], getBlogs);
 
-// get a single workout
+// get a single blog
 router.get("/:id", [auth], getBlog);
 
-// post a new workout
-router.post("/", [auth, validateBlog(blogSchema)], createBlog);
+// post a new blog
+router.post("/", [auth, validateBlog(createBlogSchema)], createBlog);
 
-// delete a workout
+// delete a blog
 router.delete("/:id", [auth], deleteBlog);
 
-// update a workout
-router.patch("/:id", [auth], updateBlog);
+// update a blog
+router.patch("/:id", [auth, validateBlog(updateBlogSchema)], updateBlog);
 
 export { router as blogsRouter };

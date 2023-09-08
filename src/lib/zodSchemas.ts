@@ -29,7 +29,7 @@ export const userLoginSchema = z.object({
   }),
 });
 
-export const blogSchema = z.object({
+export const createBlogSchema = z.object({
   body: z.object({
     title: z.string({ required_error: "Title is required." }).min(3, {
       message: "Title should be at least 3 characters long.",
@@ -38,6 +38,22 @@ export const blogSchema = z.object({
       message: "Summary should be at least 3 characters long.",
     }),
     content: z.string({ required_error: "Content is required." }).min(10, {
+      message: "Content should be at least 10 characters long.",
+    }),
+    author: z.string({ required_error: "Author is required." }),
+    authorId: z.string({ required_error: "Author ID is required." }),
+  }),
+});
+
+export const updateBlogSchema = z.object({
+  body: z.object({
+    title: z.string().min(3, {
+      message: "Title should be at least 3 characters long.",
+    }),
+    summary: z.string().min(3, {
+      message: "Summary should be at least 3 characters long.",
+    }),
+    content: z.string().min(10, {
       message: "Content should be at least 10 characters long.",
     }),
     author: z.string({ required_error: "Author is required." }),
