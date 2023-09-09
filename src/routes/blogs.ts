@@ -13,10 +13,10 @@ import { createBlogSchema, updateBlogSchema } from "../lib/zodSchemas";
 const router = Router();
 
 // get all blogs
-router.get("/", [auth], getBlogs);
+router.get("/", getBlogs);
 
 // get a single blog
-router.get("/:id", [auth], getBlog);
+router.get("/:id", getBlog);
 
 // post a new blog
 router.post("/", [auth, validateBlog(createBlogSchema)], createBlog);

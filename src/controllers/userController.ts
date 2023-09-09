@@ -6,9 +6,13 @@ import { Request, Response } from "express";
 export const register = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
-    const user = await UserModel.findOne({ username });
+    const existingUsername = await UserModel.findOne({ username });
+    const existingEmail = await UserModel.findOne({ email });
 
-    if (user) return res.json({ message: "User already exists" });
+    if (existingUsername)
+      return res.json({ message: "Username already exists" });
+
+    if (existingEmail) return res.json({ message: "Email already exists" });
 
     const hashedPwd = await bcrypt.hash(password, 10);
 
