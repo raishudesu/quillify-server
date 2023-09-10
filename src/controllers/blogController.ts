@@ -37,10 +37,15 @@ export const getBlog = async (req: Request, res: Response) => {
 export const getUserBlogs = async (req: Request, res: Response) => {
   try {
     const { authorId } = req.params;
+    if (!authorId)
+      return res.status(400).json({ message: "No author ID defined!" });
+
     const blogs = await Blogs.find({ authorId });
-    if (!blogs) {
-      res.status(400).json({ error: "No blogs available!" });
+
+    if (blogs.length === 0) {
+      return res.status(400).json({ error: "No blogs available!" });
     }
+
     res.status(200).json(blogs);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
