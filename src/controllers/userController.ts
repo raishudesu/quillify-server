@@ -46,7 +46,13 @@ export const login = async (req: Request, res: Response) => {
       });
 
     const token = jwt.sign(
-      { success: true, id: user._id, email },
+      {
+        success: true,
+        id: user._id,
+        email,
+        username: user.username,
+        createdAt: user.createdAt,
+      },
       "jwtPrivateKey",
       {
         expiresIn: "15m",
@@ -61,6 +67,7 @@ export const login = async (req: Request, res: Response) => {
         userId: user._id,
         username: user.username,
         email: user.email,
+        createdAt: user.createdAt,
       });
   } catch (error) {
     console.error("Login error:", error);

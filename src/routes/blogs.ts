@@ -5,6 +5,7 @@ import {
   getBlog,
   deleteBlog,
   updateBlog,
+  getUserBlogs,
 } from "../controllers/blogController";
 import auth from "../middleware/auth";
 import validateBlog from "../middleware/validateBlog";
@@ -17,6 +18,9 @@ router.get("/", getBlogs);
 
 // get a single blog
 router.get("/:id", getBlog);
+
+// get current user's blogs
+router.get("/getUserBlogs/:authorId", getUserBlogs);
 
 // post a new blog
 router.post("/", [auth, validateBlog(createBlogSchema)], createBlog);

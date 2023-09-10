@@ -34,6 +34,19 @@ export const getBlog = async (req: Request, res: Response) => {
   }
 };
 
+export const getUserBlogs = async (req: Request, res: Response) => {
+  try {
+    const { authorId } = req.params;
+    const blogs = await Blogs.find({ authorId });
+    if (!blogs) {
+      res.status(400).json({ error: "No blogs available!" });
+    }
+    res.status(200).json(blogs);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // create a new blog
 export const createBlog = async (req: Request, res: Response) => {
   const { title, summary, content, author, authorId } = req.body;
