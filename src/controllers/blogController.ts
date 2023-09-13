@@ -25,7 +25,8 @@ export const getBlog = async (req: Request, res: Response) => {
     const blogs = await Blogs.findById(id);
 
     if (!blogs) {
-      res.status(400).json({ error: "No such blog!" });
+      console.log("No such blog");
+      return res.status(400).json({ error: "No such blog!" });
     }
 
     res.status(200).json(blogs);
@@ -40,7 +41,7 @@ export const getUserBlogs = async (req: Request, res: Response) => {
     if (!authorId)
       return res.status(400).json({ message: "No author ID defined!" });
 
-    const blogs = await Blogs.find({ authorId });
+    const blogs = await Blogs.find({ authorId }).sort({ createdAt: -1 });
 
     if (blogs.length === 0) {
       return res.status(400).json({ error: "No blogs available!" });
@@ -85,7 +86,7 @@ export const deleteBlog = async (req: Request, res: Response) => {
       res.status(400).json({ error: "No such blog!" });
     }
 
-    res.status(200).json(blog);
+    res.status(200).json({ message: "Blog deleted!", blogDeleted: blog });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
