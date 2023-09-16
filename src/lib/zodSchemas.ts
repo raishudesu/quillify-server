@@ -47,16 +47,25 @@ export const createBlogSchema = z.object({
 
 export const updateBlogSchema = z.object({
   body: z.object({
-    title: z.string().min(3, {
-      message: "Title should be at least 3 characters long.",
-    }),
-    summary: z.string().min(3, {
-      message: "Summary should be at least 3 characters long.",
-    }),
-    content: z.string().min(10, {
-      message: "Content should be at least 10 characters long.",
-    }),
-    author: z.string({ required_error: "Author is required." }),
-    authorId: z.string({ required_error: "Author ID is required." }),
+    title: z
+      .string()
+      .min(3, {
+        message: "Title should be at least 3 characters long.",
+      })
+      .optional(),
+    summary: z
+      .string()
+      .min(3, {
+        message: "Summary should be at least 3 characters long.",
+      })
+      .optional(),
+    content: z
+      .string()
+      .min(10, {
+        message: "Content should be at least 10 characters long.",
+      })
+      .optional(),
+    author: z.string({ required_error: "Author is required." }).optional(),
+    authorId: z.string({ required_error: "Author ID is required." }).optional(),
   }),
 });
