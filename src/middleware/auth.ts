@@ -1,11 +1,12 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import { CustomRequest } from "../lib/types";
 
-interface CustomRequest extends Request {
-  user?: any; // Customize the user object type based on your JWT payload
-}
-
-const auth = (req: CustomRequest, res: Response, next: NextFunction) => {
+export const checkToken = (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
   const token = req.header("x-auth-token");
   if (!token)
     return res.status(401).json({
@@ -25,4 +26,29 @@ const auth = (req: CustomRequest, res: Response, next: NextFunction) => {
   }
 };
 
-export default auth;
+export const checkUniqueToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const { token } = req.cookies;
+
+  if (token) {
+    try {
+      const session = jwt.verify(token, "jwtPrivateKey") as JwtPayload;
+
+      const tokenUserId = session.id;
+
+      if (tokenUserId !== id) {
+        return res.json({ message: "Token not unique to current user" });
+      }
+    } catch (error) {
+      return res.json({ message: "Invalid token", error });
+    }
+  } else {
+    return res.json({ message: "No token provided" });
+  }
+
+  next();
+};

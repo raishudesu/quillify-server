@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Router } from "express";
 import {
   createBlog,
   getBlogs,
@@ -7,9 +7,9 @@ import {
   updateBlog,
   getUserBlogs,
 } from "../controllers/blogController";
-import auth from "../middleware/auth";
-import { validateBlog } from "../middleware/validateBlog";
+import { checkToken, checkUniqueToken } from "../middleware/auth";
 import { createBlogSchema, updateBlogSchema } from "../lib/zodSchemas";
+import validateSchema from "../middleware/validateSchema";
 
 const router = Router();
 
@@ -23,15 +23,19 @@ router.get("/getBlog/:id", getBlog);
 router.get("/getUserBlogs/:authorId", getUserBlogs);
 
 // post a new blog
-router.post("/createBlog", [auth, validateBlog(createBlogSchema)], createBlog);
+router.post(
+  "/createBlog",
+  [checkToken, validateSchema(createBlogSchema)],
+  createBlog
+);
 
 // delete a blog
-router.delete("/deleteBlog/:id", [auth], deleteBlog);
+router.delete("/deleteBlog/:id", [checkToken, checkUniqueToken], deleteBlog);
 
 // update a blog
 router.patch(
   "/updateBlog/:id",
-  [auth, validateBlog(updateBlogSchema)],
+  [checkToken, checkUniqueToken, validateSchema(updateBlogSchema)],
   updateBlog
 );
 

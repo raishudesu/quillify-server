@@ -7,30 +7,36 @@ import {
   updateUserProfile,
   updateUserPwd,
 } from "../controllers/userController";
+import validateSchema from "../middleware/validateSchema";
 import {
-  validateUserLogin,
-  validateUserRegistration,
-} from "../middleware/validateUser";
-import { userLoginSchema, userRegistrationSchema } from "../lib/zodSchemas";
-import auth from "../middleware/auth";
+  userLoginSchema,
+  userProfileUpdateSchema,
+  userPwdUpdateSchema,
+  userRegistrationSchema,
+} from "../lib/zodSchemas";
+import { checkToken, checkUniqueToken } from "../middleware/auth";
 
 const router = Router();
 
 // sign up a user
-router.post(
-  "/register",
-  validateUserRegistration(userRegistrationSchema),
-  register
-);
+router.post("/register", validateSchema(userRegistrationSchema), register);
 
 // sign in a user
-router.post("/login", validateUserLogin(userLoginSchema), login);
+router.post("/login", validateSchema(userLoginSchema), login);
 
 //update user profile
-router.patch("/updateUserProfile/:id", [auth], updateUserProfile);
+router.patch(
+  "/updateUserProfile/:id",
+  [checkToken, checkUniqueToken, validateSchema(userProfileUpdateSchema)],
+  updateUserProfile
+);
 
 // update user password
-router.patch("/update_pwd/:id", updateUserPwd);
+router.patch(
+  "/updateUserPwd/:id",
+  [checkToken, checkUniqueToken, validateSchema(userPwdUpdateSchema)],
+  updateUserPwd
+);
 
 //get user session
 router.get("/getUser", getUser);

@@ -29,6 +29,32 @@ export const userLoginSchema = z.object({
   }),
 });
 
+export const userProfileUpdateSchema = z.object({
+  body: z.object({
+    username: z
+      .string({
+        required_error: "Username is required.",
+      })
+      .min(3, {
+        message: "Username must be at least 3 characters long.",
+      }),
+    email: z
+      .string({ required_error: "Email is required." })
+      .email("Not a valid email"),
+  }),
+});
+
+export const userPwdUpdateSchema = z.object({
+  body: z.object({
+    password: z
+      .string({ required_error: "Password is required" })
+      .min(8, { message: "Password must be at least 8 characters long." }),
+    newPwd: z
+      .string({ required_error: "Password is required." })
+      .min(8, { message: "Password must be at least 8 characters long." }),
+  }),
+});
+
 export const createBlogSchema = z.object({
   body: z.object({
     title: z.string({ required_error: "Title is required." }).min(3, {
