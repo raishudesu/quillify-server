@@ -1,7 +1,8 @@
 import UserModel from "../models/userModel";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
+import { ISession, TSession } from "../lib/types";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -75,6 +76,56 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+export const updateUserProfile = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { username, email, password } = req.body;
+
+    const { token } = req.cookies;
+
+    const user = await UserModel.findOne({ _id: id });
+
+    if (!user) return res.json({ message: "User doesn't exist" });
+
+    // CHECK IF TOKEN IS UNIQUE TO THE USER
+
+    if (token) {
+      try {
+        const session = jwt.verify(token, "jwtPrivateKey") as JwtPayload;
+        console.log(session);
+        const tokenUserId = session.id;
+
+        if (tokenUserId !== id) {
+          console.log(tokenUserId, id);
+          return res.json({ message: "Token not unique to current user" });
+        }
+      } catch (error) {
+        return res.json({ message: "Invalid token", error });
+      }
+    } else {
+      return res.json({ message: "No token provided" });
+    }
+
+    const isPwdValid = await bcrypt.compare(password, user.password);
+
+    if (!isPwdValid)
+      return res.json({ message: "Password provided is incorrect" });
+
+    const updateUser = await UserModel.findOneAndUpdate(
+      { _id: id },
+      {
+        username,
+        email,
+      }
+    );
+
+    res.json({ message: "User profile updated" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 export const updateUserPwd = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
@@ -87,7 +138,7 @@ export const updateUserPwd = async (req: Request, res: Response) => {
     const isPwdValid = await bcrypt.compare(password, user.password);
 
     if (!isPwdValid)
-      return res.json({ message: "Username or password is incorrect" });
+      return res.json({ message: "Password provided is incorrect" });
 
     const hashedPwd = await bcrypt.hash(newPwd, 10);
 
