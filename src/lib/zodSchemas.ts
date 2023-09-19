@@ -32,26 +32,23 @@ export const userLoginSchema = z.object({
 export const userProfileUpdateSchema = z.object({
   body: z.object({
     username: z
-      .string({
-        required_error: "Username is required.",
-      })
+      .string()
       .min(3, {
-        message: "Username must be at least 3 characters long.",
-      }),
-    email: z
-      .string({ required_error: "Email is required." })
-      .email("Not a valid email"),
+        message: "New Username must be at least 3 characters long.",
+      })
+      .optional(),
+    email: z.string().email("Not a valid email").optional(),
   }),
 });
 
 export const userPwdUpdateSchema = z.object({
   body: z.object({
     password: z
-      .string({ required_error: "Password is required" })
-      .min(8, { message: "Password must be at least 8 characters long." }),
+      .string({ required_error: "Old Password is required" })
+      .min(8, { message: "Old Password must be at least 8 characters long." }),
     newPwd: z
-      .string({ required_error: "Password is required." })
-      .min(8, { message: "Password must be at least 8 characters long." }),
+      .string({ required_error: "New Password is required." })
+      .min(8, { message: "New Password must be at least 8 characters long." }),
   }),
 });
 

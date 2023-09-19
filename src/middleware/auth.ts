@@ -32,13 +32,15 @@ export const checkUniqueToken = (
   next: NextFunction
 ) => {
   const { id } = req.params;
-  const { token } = req.cookies;
+  const token = req.header("x-auth-token");
 
   if (token) {
     try {
       const session = jwt.verify(token, "jwtPrivateKey") as JwtPayload;
 
       const tokenUserId = session.id;
+
+      console.log(tokenUserId, id);
 
       if (tokenUserId !== id) {
         return res.json({ message: "Token not unique to current user" });

@@ -97,7 +97,11 @@ export const updateUserProfile = async (req: Request, res: Response) => {
       }
     );
 
-    res.json({ message: "User profile updated" });
+    res.json({
+      success: true,
+      message: "User profile updated",
+      updatedCredentials: { username, email },
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Internal server error" });
