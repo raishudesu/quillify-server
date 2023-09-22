@@ -38,6 +38,7 @@ export const login = async (req: Request, res: Response) => {
       return res.json({ success: false, message: "User doesn't exist" });
 
     const isPwdValid = await bcrypt.compare(password, user.password);
+    console.log(isPwdValid);
 
     if (!isPwdValid)
       return res.json({
@@ -111,7 +112,7 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 export const updateUserPwd = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { password, newPwd } = req.body;
+    const { password, newPwd, confirmNewPwd } = req.body;
 
     const user = await UserModel.findOne({ _id: id });
 
@@ -122,6 +123,9 @@ export const updateUserPwd = async (req: Request, res: Response) => {
     if (!isPwdValid)
       return res.json({ message: "Password provided is incorrect" });
 
+    if (newPwd !== confirmNewPwd)
+      return res.json({ message: "Passwords do not match" });
+
     const hashedPwd = await bcrypt.hash(newPwd, 10);
 
     const updatePwd = await UserModel.findOneAndUpdate(
@@ -129,7 +133,7 @@ export const updateUserPwd = async (req: Request, res: Response) => {
       { password: hashedPwd }
     );
 
-    res.json({ message: "Password updated", updatePwd });
+    res.json({ message: "Password updated" });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });

@@ -30,12 +30,12 @@ router.post(
 );
 
 // delete a blog
-router.delete("/deleteBlog/:id", [checkToken, checkUniqueToken], deleteBlog);
+router.delete("/deleteBlog/:id", [checkToken], deleteBlog);
 
 // update a blog
 router.patch(
   "/updateBlog/:id",
-  [checkToken, checkUniqueToken, validateSchema(updateBlogSchema)],
+  [checkToken, validateSchema(updateBlogSchema)],
   updateBlog
 );
 

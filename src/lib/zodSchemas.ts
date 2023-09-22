@@ -44,11 +44,16 @@ export const userProfileUpdateSchema = z.object({
 export const userPwdUpdateSchema = z.object({
   body: z.object({
     password: z
-      .string({ required_error: "Old Password is required" })
-      .min(8, { message: "Old Password must be at least 8 characters long." }),
+      .string({ required_error: "Old password is required" })
+      .min(8, { message: "Old password must be at least 8 characters long." }),
     newPwd: z
-      .string({ required_error: "New Password is required." })
-      .min(8, { message: "New Password must be at least 8 characters long." }),
+      .string({ required_error: "New password is required." })
+      .min(8, { message: "New password must be at least 8 characters long." }),
+    confirmNewPwd: z
+      .string({ required_error: "Confirming new password is required." })
+      .min(8, {
+        message: "Confirming new password must be at least 8 characters long.",
+      }),
   }),
 });
 
