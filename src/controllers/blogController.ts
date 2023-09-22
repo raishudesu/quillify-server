@@ -95,14 +95,14 @@ export const deleteBlog = async (req: Request, res: Response) => {
 // update a blog
 export const updateBlog = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { postId } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
       return res.status(404).json({ error: "No such blog!" });
     }
 
     const blog = await Blogs.findOneAndUpdate(
-      { _id: id },
+      { _id: postId },
       {
         ...req.body,
       }
@@ -112,7 +112,7 @@ export const updateBlog = async (req: Request, res: Response) => {
       res.status(400).json({ error: "No such blog!" });
     }
 
-    res.status(200).json(blog);
+    res.status(200).json({ success: true, message: "Post updated" });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }

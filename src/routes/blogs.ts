@@ -7,7 +7,11 @@ import {
   updateBlog,
   getUserBlogs,
 } from "../controllers/blogController";
-import { checkToken, checkUniqueToken } from "../middleware/auth";
+import {
+  checkToken,
+  checkUniqueToken,
+  checkUniqueTokenBlog,
+} from "../middleware/auth";
 import { createBlogSchema, updateBlogSchema } from "../lib/zodSchemas";
 import validateSchema from "../middleware/validateSchema";
 
@@ -34,8 +38,8 @@ router.delete("/deleteBlog/:id", [checkToken], deleteBlog);
 
 // update a blog
 router.patch(
-  "/updateBlog/:id",
-  [checkToken, validateSchema(updateBlogSchema)],
+  "/updateBlog/:userId/:postId",
+  [checkToken, checkUniqueTokenBlog, validateSchema(updateBlogSchema)],
   updateBlog
 );
 

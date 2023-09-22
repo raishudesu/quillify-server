@@ -54,3 +54,32 @@ export const checkUniqueToken = (
 
   next();
 };
+
+export const checkUniqueTokenBlog = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId } = req.params;
+  const token = req.header("x-auth-token");
+
+  if (token) {
+    try {
+      const session = jwt.verify(token, "jwtPrivateKey") as JwtPayload;
+
+      const tokenUserId = session.id;
+
+      console.log(tokenUserId, userId);
+
+      if (tokenUserId !== userId) {
+        return res.json({ message: "Token not unique to current user" });
+      }
+    } catch (error) {
+      return res.json({ message: "Invalid token", error });
+    }
+  } else {
+    return res.json({ message: "No token provided" });
+  }
+
+  next();
+};
