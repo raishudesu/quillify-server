@@ -55,7 +55,7 @@ export const getUserBlogs = async (req: Request, res: Response) => {
 
 // create a new blog
 export const createBlog = async (req: Request, res: Response) => {
-  const { title, summary, content, author, authorId } = req.body;
+  const { title, summary, content, author, authorId, tags } = req.body;
 
   // add doc to db
   try {
@@ -65,6 +65,7 @@ export const createBlog = async (req: Request, res: Response) => {
       content,
       author,
       authorId,
+      tags,
     });
     res.status(200).json(blog);
   } catch (error: any) {

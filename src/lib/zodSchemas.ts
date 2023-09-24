@@ -70,6 +70,7 @@ export const createBlogSchema = z.object({
     }),
     author: z.string({ required_error: "Author is required." }),
     authorId: z.string({ required_error: "Author ID is required." }),
+    tags: z.string({ required_error: "At least 1 tag is required" }).array(),
   }),
 });
 

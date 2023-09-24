@@ -145,7 +145,7 @@ export const getUser = (req: Request, res: Response) => {
     const { token } = req.cookies;
     token
       ? jwt.verify(token, "jwtPrivateKey", {}, (err, info) => {
-          if (err) throw err;
+          if (err) return res.json(err);
           const session = { ...(info as object), token };
           console.log(session);
           res.json(session);
