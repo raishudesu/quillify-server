@@ -118,3 +118,17 @@ export const updateBlog = async (req: Request, res: Response) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const searchBlogs = async (req: Request, res: Response) => {
+  try {
+    const { searchParams } = req.body;
+
+    const keywords = searchParams.split(" ");
+
+    const blogs = await Blogs.find({ tags: { $in: keywords } }).exec();
+
+    res.json(blogs);
+  } catch (error) {
+    res.json(error);
+  }
+};

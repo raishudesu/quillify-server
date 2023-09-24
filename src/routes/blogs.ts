@@ -6,6 +6,7 @@ import {
   deleteBlog,
   updateBlog,
   getUserBlogs,
+  searchBlogs,
 } from "../controllers/blogController";
 import {
   checkToken,
@@ -19,6 +20,9 @@ const router = Router();
 
 // get all blogs
 router.get("/getBlogs", getBlogs);
+
+// search for blogs
+router.get("/search", searchBlogs);
 
 // get a single blog
 router.get("/getBlog/:id", getBlog);
