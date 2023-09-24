@@ -22,7 +22,7 @@ const router = Router();
 router.get("/getBlogs", getBlogs);
 
 // search for blogs
-router.get("/search", searchBlogs);
+router.get("/search/:searchParams", searchBlogs);
 
 // get a single blog
 router.get("/getBlog/:id", getBlog);

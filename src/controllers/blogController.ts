@@ -121,7 +121,7 @@ export const updateBlog = async (req: Request, res: Response) => {
 
 export const searchBlogs = async (req: Request, res: Response) => {
   try {
-    const { searchParams } = req.body;
+    const { searchParams } = req.params;
 
     const keywords = searchParams.split(" ");
 
