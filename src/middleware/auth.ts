@@ -72,13 +72,15 @@ export const checkUniqueTokenBlog = (
       console.log(tokenUserId, userId);
 
       if (tokenUserId !== userId) {
-        return res.json({ message: "Token not unique to current user" });
+        return res
+          .status(422)
+          .json({ message: "Token not unique to current user" });
       }
     } catch (error) {
-      return res.json({ message: "Invalid token", error });
+      return res.status(422).json({ message: "Invalid token", error });
     }
   } else {
-    return res.json({ message: "No token provided" });
+    return res.status(422).json({ message: "No token provided" });
   }
 
   next();
