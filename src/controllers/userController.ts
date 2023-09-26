@@ -35,13 +35,15 @@ export const login = async (req: Request, res: Response) => {
     const user = await UserModel.findOne({ email });
 
     if (!user)
-      return res.json({ success: false, message: "User doesn't exist" });
+      return res
+        .status(422)
+        .json({ success: false, message: "User doesn't exist" });
 
     const isPwdValid = await bcrypt.compare(password, user.password);
     console.log(isPwdValid);
 
     if (!isPwdValid)
-      return res.json({
+      return res.status(422).json({
         success: false,
         message: "Username or password is incorrect",
       });
