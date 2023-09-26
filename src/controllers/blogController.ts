@@ -76,12 +76,12 @@ export const createBlog = async (req: Request, res: Response) => {
 // delete a blog
 export const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    const { postId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(postId)) {
       return res.status(404).json({ error: "No such blog!" });
     }
 
-    const blog = await Blogs.findOneAndDelete({ _id: id });
+    const blog = await Blogs.findOneAndDelete({ _id: postId });
 
     if (!blog) {
       res.status(400).json({ error: "No such blog!" });

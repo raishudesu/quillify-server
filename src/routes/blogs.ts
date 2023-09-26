@@ -38,7 +38,11 @@ router.post(
 );
 
 // delete a blog
-router.delete("/deleteBlog/:id", [checkToken], deleteBlog);
+router.delete(
+  "/deleteBlog/:userId/:postId",
+  [checkToken, checkUniqueTokenBlog],
+  deleteBlog
+);
 
 // update a blog
 router.patch(
