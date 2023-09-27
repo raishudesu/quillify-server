@@ -10,9 +10,10 @@ export const register = async (req: Request, res: Response) => {
     const existingEmail = await UserModel.findOne({ email });
 
     if (existingUsername)
-      return res.json({ message: "Username already exists" });
+      return res.json({ success: false, message: "Username already exists" });
 
-    if (existingEmail) return res.json({ message: "Email already exists" });
+    if (existingEmail)
+      return res.json({ success: false, message: "Email already exists" });
 
     const hashedPwd = await bcrypt.hash(password, 10);
 
@@ -22,7 +23,11 @@ export const register = async (req: Request, res: Response) => {
       password: hashedPwd,
     });
 
-    res.json({ message: "User registered successfully", userDetails: newUser });
+    res.json({
+      success: true,
+      message: "User registered successfully",
+      userDetails: newUser,
+    });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -36,14 +41,14 @@ export const login = async (req: Request, res: Response) => {
 
     if (!user)
       return res
-        .status(422)
+        .status(400)
         .json({ success: false, message: "User doesn't exist" });
 
     const isPwdValid = await bcrypt.compare(password, user.password);
     console.log(isPwdValid);
 
     if (!isPwdValid)
-      return res.status(422).json({
+      return res.status(400).json({
         success: false,
         message: "Username or password is incorrect",
       });
@@ -85,12 +90,16 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 
     const user = await UserModel.findOne({ _id: id });
 
-    if (!user) return res.json({ message: "User doesn't exist" });
+    if (!user)
+      return res.json({ success: false, message: "User doesn't exist" });
 
     const isPwdValid = await bcrypt.compare(password, user.password);
 
     if (!isPwdValid)
-      return res.json({ message: "Password provided is incorrect" });
+      return res.json({
+        success: false,
+        message: "Password provided is incorrect",
+      });
 
     const updateUser = await UserModel.findOneAndUpdate(
       { _id: id },
@@ -118,15 +127,19 @@ export const updateUserPwd = async (req: Request, res: Response) => {
 
     const user = await UserModel.findOne({ _id: id });
 
-    if (!user) return res.json({ message: "User doesn't exist" });
+    if (!user)
+      return res.json({ success: false, message: "User doesn't exist" });
 
     const isPwdValid = await bcrypt.compare(password, user.password);
 
     if (!isPwdValid)
-      return res.json({ message: "Password provided is incorrect" });
+      return res.json({
+        success: false,
+        message: "Password provided is incorrect",
+      });
 
     if (newPwd !== confirmNewPwd)
-      return res.json({ message: "Passwords do not match" });
+      return res.json({ success: false, message: "Passwords do not match" });
 
     const hashedPwd = await bcrypt.hash(newPwd, 10);
 
@@ -135,7 +148,7 @@ export const updateUserPwd = async (req: Request, res: Response) => {
       { password: hashedPwd }
     );
 
-    res.json({ message: "Password updated" });
+    res.json({ success: true, message: "Password updated" });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -161,7 +174,7 @@ export const getUser = (req: Request, res: Response) => {
 
 export const logoutUser = (req: Request, res: Response) => {
   try {
-    res.cookie("token", "").json({ message: "User logged out" });
+    res.cookie("token", "").json({ success: true, message: "User logged out" });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ success: false, message: "Internal server error" });
