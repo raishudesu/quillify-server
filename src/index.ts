@@ -21,7 +21,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true })); // Adjust the li
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: "https://quillify.vercel.app",
   })
 ); //set the client side address for setting up cookies
 app.use(cookieParser());
