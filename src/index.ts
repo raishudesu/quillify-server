@@ -26,7 +26,6 @@ app.use(
 ); //set the client side address for setting up cookies
 app.use(cookieParser());
 app.use((req, res, next) => {
-  //and origin
   console.log(req.path, req.method);
   next();
 });
