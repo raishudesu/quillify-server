@@ -1,17 +1,17 @@
-## Express App with Typescript
+## Quillify Express Server
 
-This Express App API uses MongoDb user authentication and accessing sample data.
+This Express App API uses MongoDb user authentication and for CRUD methods.
 
 To use this repository:
 
 ```
-git clone https://github.com/raishudesu/express-app-ts
+git clone https://github.com/raishudesu/quillify-server
 ```
 
 ## Move to its directory:
 
 ```
-cd express-app-ts
+cd quillify-server
 ```
 
 ## Install dependencies:
